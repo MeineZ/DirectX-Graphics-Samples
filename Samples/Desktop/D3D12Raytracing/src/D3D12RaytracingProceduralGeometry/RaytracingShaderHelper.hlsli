@@ -16,6 +16,11 @@
 
 #define INFINITY (1.0/0.0)
 
+
+float Random(float2 co)
+{
+	return frac(sin(dot(co, float2(12.9898, 78.233))) * 43758.5453);
+}
 struct Ray
 {
     float3 origin;

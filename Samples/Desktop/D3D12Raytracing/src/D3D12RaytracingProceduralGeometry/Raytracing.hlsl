@@ -133,10 +133,17 @@ bool TraceShadowRayAndReportIfHit(in Ray ray, in UINT currentRayRecursionDepth)
     // Set the ray's extents.
     RayDesc rayDesc;
     rayDesc.Origin = ray.origin;
-    rayDesc.Direction = ray.direction;
+
+	// Cone tracing for soft shadows
+	float r = g_sceneCB.elapsedTime * ray.origin.xy;
+	float3 offset = float3(Random(r), Random(r * 2.1489375), Random(r * 3.14796253)) - 0.5;
+	offset *= 0.1;
+
+    rayDesc.Direction = normalize(ray.direction + offset);
+
     // Set TMin to a zero value to avoid aliasing artifcats along contact areas.
     // Note: make sure to enable back-face culling so as to avoid surface face fighting.
-    rayDesc.TMin = 0;
+    rayDesc.TMin = 0.001;
     rayDesc.TMax = 10000;
 
     // Initialize shadow ray payload.
